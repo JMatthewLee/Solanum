@@ -4,16 +4,13 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyAI : MonoBehaviour
+public class EnemyAI : BaseEnemyMovement
 {
-    [SerializeField] private Transform targetPlayer;
     [SerializeField] private Animator enemyAnimator;
     [SerializeField] private PlayerDetection playerDetection;
-    NavMeshAgent agent;
-
+    
     [SerializeField] private bool isAwake;
     [SerializeField] private float speed;
-
     [SerializeField] private float attackRange;
     [SerializeField] private float attackDelay;
     [SerializeField] private bool canAttack;
@@ -22,21 +19,9 @@ public class EnemyAI : MonoBehaviour
 
     private Rigidbody2D rb;
 
-    //CAN BE USED TO FIND PLAYER LAST LOCATION
-    //[SerializeField] private float postAttackDelay; //USED WHEN ENEMY WILL CONTINUE TO LIVE AFTER ATTACK
-    //private Vector2 inRangeLocation;
-    //private Vector2 lastTargetLocation;
-
     private void Start()
     {
         targetPlayer = GameObject.Find("Player").GetComponent<Transform>();
-    }
-
-    void Awake()
-    {
-        agent = GetComponent<NavMeshAgent>();
-        agent.updateRotation = false;
-        agent.updateUpAxis = false;    
     }
 
     private void OnEnable()
@@ -62,8 +47,8 @@ public class EnemyAI : MonoBehaviour
 
     public void Sleep() //Function refernced in Player Detection
     {
-        isAwake =false;
-        canAttack=false;
+        isAwake = false;
+        canAttack = false;
         attackLocked = false;
     }
 
@@ -78,13 +63,11 @@ public class EnemyAI : MonoBehaviour
                 agent.speed = 0; //stop any movement
                 StartAttack();
             }
-
             else if (distanceToPlayer <= chaseRange)
             {
                 agent.speed = speed; //Set Speed to desired value
                 ChasePlayer();
             }
-
             else
             {
                 enemyAnimator.SetBool("IsMoving", false);
@@ -92,15 +75,10 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
-    void ChasePlayer()
+    protected override void ChasePlayer()
     {
-        agent.SetDestination(targetPlayer.position);
-        
-        //OLD MOVEMENT WIHTOUT NAVMESH
-        //Vector2 direction = (targetPlayer.position - transform.position).normalized;
-        //rb.MovePosition(rb.position + direction * speed * Time.fixedDeltaTime);
-
-        enemyAnimator.SetBool("IsMoving",true);
+        base.ChasePlayer();
+        enemyAnimator.SetBool("IsMoving", true);
     }
 
     void StartAttack()
@@ -123,13 +101,5 @@ public class EnemyAI : MonoBehaviour
             //StartCoroutine(AttackDelay()); //ATTACK DELAY USED ON OTHER ENEMIES
         }
     }
-
-    //IEnumerator AttackDelay()
-    //{
-    //    yield return new WaitForSeconds(postAttackDelay);//Time before the player can attack again
-
-    //    canAttack = true;
-    //    attackLocked = false;
-    //}
 }
 

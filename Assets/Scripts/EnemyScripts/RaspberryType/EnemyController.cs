@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyController : MonoBehaviour
+public class EnemyController : BaseEnemyMovement
 {
     public static event Action<EnemyController> EnemyHasDied; //BRODCAST THIS ENEMY HAS DIED
 
@@ -13,7 +13,6 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private EnemyStateCommunicator enemyStateCommunicator; //reference to the player detection script used to call the sleep function
     [SerializeField] private DammageFlash dammageFlash;
     [SerializeField] private Animator enemyAnimator;
-    [SerializeField] private Transform targetPlayer;
     [SerializeField] private PlayerValues playerValueHp;
 
     [SerializeField] private float enemyMaxHp;
@@ -30,7 +29,6 @@ public class EnemyController : MonoBehaviour
     private bool attackLocked = false;
 
     private Rigidbody2D rb;
-    private NavMeshAgent agent;
 
     //----------------------------------------Initializers---------------------------------------------------------------------------------------------
 
@@ -50,6 +48,13 @@ public class EnemyController : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         agent.updateRotation = false;
         agent.updateUpAxis = false;
+        
+        // Improve enemy avoidance to prevent overlapping
+        agent.radius = 0.3f; // Increase personal space
+        agent.avoidancePriority = UnityEngine.Random.Range(1, 100); // Random priority to prevent all enemies having same priority
+        agent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
+        agent.autoBraking = true; // Helps with smoother movement
+        agent.stoppingDistance = 0.1f; // Small stopping distance to prevent exact overlap
     }
 
     private void Start()
@@ -84,7 +89,6 @@ public class EnemyController : MonoBehaviour
 
                 //Add something to make enemy move after each attack
             }
-
             else if (distanceToPlayer > attackRange)
             {
                 ChasePlayer();
@@ -96,25 +100,17 @@ public class EnemyController : MonoBehaviour
 
     //-----------------------------------CHASE--------------------------------------------------------------------------------------------------------------------------------------
 
-
-    void ChasePlayer()
+    protected override void ChasePlayer()
     {
+        base.ChasePlayer();
         enemyAnimator.SetBool("IsMoving", true);
-
-        agent.SetDestination(targetPlayer.position);
         agent.speed = speed; //Set Speed to desired value
-
-        // direction = (targetPlayer.position - transform.position).normalized;
-        //rb.MovePosition(rb.position + direction * speed * Time.fixedDeltaTime);
     }
-
-
 
     //---------------------------------ATTACK----------------------------------------------------------------------------------------------------------------------------------------
 
     void StartAttack()
     {
-
         if (canAttack)
         {
             //Debug.Log("attackinitiated");

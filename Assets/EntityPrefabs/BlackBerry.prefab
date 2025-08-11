@@ -392,10 +392,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 657c051fdfb3e0a4b9554872d191782e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  movementConfig: {fileID: 11400000, guid: 7befb58ab458d704299f1c6762da5dfe, type: 2}
   enemyStateCommunicator: {fileID: 7728615509013656365}
   dammageFlash: {fileID: 5169933194018892387}
   enemyAnimator: {fileID: 7581505156481790725}
-  targetPlayer: {fileID: 0}
   playerValueHp: {fileID: 0}
   enemyMaxHp: 10
   enemyCurrentHp: 0

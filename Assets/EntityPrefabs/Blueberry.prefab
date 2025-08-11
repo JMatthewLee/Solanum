@@ -563,7 +563,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a57223a6ca1d8e4ba69a3931d63a315, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetPlayer: {fileID: 0}
+  movementConfig: {fileID: 11400000, guid: 7befb58ab458d704299f1c6762da5dfe, type: 2}
   enemyAnimator: {fileID: 1282903841926054754}
   playerDetection: {fileID: 2020970895463090334}
   isAwake: 0
