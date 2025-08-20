@@ -162,7 +162,7 @@ public class EnemyController : BaseEnemyMovement
         return false;
     }
     
-    // Get the next patrol node in sequence
+    // Get the next patrol node randomly
     private Transform GetNextPatrolNode()
     {
         if (patrolNodes == null || patrolNodes.Length == 0)
@@ -171,8 +171,23 @@ public class EnemyController : BaseEnemyMovement
             return null;
         }
         
-        // Move to next node in sequence
-        currentNodeIndex = (currentNodeIndex + 1) % patrolNodes.Length;
+        // Choose a random node (avoiding the current one if possible)
+        int randomIndex;
+        if (patrolNodes.Length > 1)
+        {
+            // If we have multiple nodes, avoid choosing the current one
+            do
+            {
+                randomIndex = UnityEngine.Random.Range(0, patrolNodes.Length);
+            } while (randomIndex == currentNodeIndex);
+        }
+        else
+        {
+            // If we only have one node, just use it
+            randomIndex = 0;
+        }
+        
+        currentNodeIndex = randomIndex;
         return patrolNodes[currentNodeIndex];
     }
     
