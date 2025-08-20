@@ -404,6 +404,29 @@ MonoBehaviour:
   attackRange: 2.5
   attackDelay: 1
   chaseRange: 0
+  attackContinuationRange: 8
+  repositionRange: 12
+  maxAttackDistance: 15
+  maxAttacksPerEngagement: 2
+  repositionTime: 3
+  strategicPositioningRadius: 4
+  movementSpeedMultiplier: 1.5
+  stopThreshold: 0.1
+  immediateAttackRange: 2
+  landingCommitTime: 0.5
+  blueberrySpeedModifier: 0.8
+  projectileAlignmentRadius: 3
+  alignmentTolerance: 15
+  isBlueberryEnemy: 0
+  usePatrolMode: 1
+  useNodeBasedPatrol: 1
+  patrolNodes: []
+  nodeReachThreshold: 0.5
+  nodeWaitTime: 2
+  maxDistanceFromNodes: 6
+  tacticalNodeRadius: 4
+  patrolRadius: 8
+  patrolPointChangeTime: 5
 --- !u!1 &7523495203538733468
 GameObject:
   m_ObjectHideFlags: 0
