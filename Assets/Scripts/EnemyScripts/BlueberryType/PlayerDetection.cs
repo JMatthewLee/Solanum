@@ -5,81 +5,33 @@ using UnityEngine.UIElements;
 
 public class PlayerDetection : MonoBehaviour
 {
-    [SerializeField] GameObject enemy; //Reference to current attached enemy
-    [SerializeField] Animator enemyAnimator; //Reference to the animator on current enemy
+    [SerializeField] GameObject enemy;
+    [SerializeField] Animator enemyAnimator;
     [SerializeField] private EnemyAI enemyAI;
-
-    [SerializeField] private float sleepDelay; //How long the enemy will stay awake once out of detection range
-    [SerializeField] private bool isAwake = false;
-
-    private void Start()
-    {
-        //Debug.Log($"enemy: {enemy != null}");
-        //Debug.Log($"enemyAnimator: {enemyAnimator != null}");
-        //Debug.Log($"enemyAI: {enemyAI != null}");
-    }
+    [SerializeField] private float sleepDelay;
 
     void OnTriggerEnter2D(Collider2D playerCollider)
     {
-        if (playerCollider.CompareTag("Player")) // || playerCollider.CompareTag("PlayerProjectiles")
-        { // Increment the counter when something enters the detection range
-
-            ResetEnemyAwakeStatus();
-        }
-    }
-
-   // void OnTriggerExit2D(Collider2D playerCollider)
-    //{
-    //    if (playerCollider.CompareTag("Player")) //|| playerCollider.CompareTag("PlayerProjectiles")
-    //    {  // Decrement the counter when something leaves the detection range
-
-    //        RestartEnemySleepCountdown();
-    //    }
-    //}
-
-    public void ResetEnemyAwakeStatus() //Function used to Wake up the Enemy and/or stop the Sleep Countdown
-    {
-        if (!isAwake)
+        if (playerCollider.CompareTag("Player"))
         {
-            Debug.Log("Player Detected");
             WakeUp();
         }
-
-        /*if (detectionCoroutine != null)
-        {
-            StopCoroutine(detectionCoroutine); // Stop sleep timer if already running
-            detectionCoroutine = null;
-        }*/
     }
 
-    public void RestartEnemySleepCountdown()
+    public void WakeUp()
     {
-        /*if (detectionCount <= 0 && isAwake)
+        if (enemyAnimator != null)
         {
-            detectionCoroutine = StartCoroutine(GoToSleepAfterDelay()); // Start sleep timer if no more objects are in range
-        }*/
-    }
-
-
-    /*IEnumerator GoToSleepAfterDelay() //Coroutine for sleep delay
-    {
-        yield return new WaitForSeconds(sleepDelay);
-        if (detectionCount <= 0) // Ensure no objects have re-entered the range
-        {
-            Sleep(false,false);
+            enemyAnimator.SetBool("IsAwake", true);
+            // Don't set IsMoving yet - wait for animation to finish
         }
-    }*/
-
-    void WakeUp()
-    {
-        isAwake = true;
-        Debug.Log("Enemy has woken up!");
-        enemyAI.enabled = true; //Enable enemy AI script
+        
+        // Don't enable EnemyAI yet - wait for animation event
+        // The BlueBerryCommunicator.WakeUpFinish() will handle this
     }
 
-    public void Sleep(bool isExploding,bool isKilled)
+    public void Sleep(bool isExploding, bool isKilled)
     {
-        isAwake = false;
         if (enemyAnimator != null)
         {
             if (isExploding)
@@ -90,11 +42,14 @@ public class PlayerDetection : MonoBehaviour
                     enemyAnimator.SetBool("IsKilled", true);
                 }
             }
-            enemyAnimator.SetBool("IsAwake", false); //Play Enemy Sleep Animation
+            enemyAnimator.SetBool("IsAwake", false);
         }
-        Debug.Log("Enemy has gone to sleep!");
 
-        enemyAI.Sleep();
-        enemyAI.enabled = false; //Disable enemy AI script
+        if (enemyAI != null)
+        {
+            enemyAI.Sleep();
+            // Disable the EnemyAI script component when sleeping
+            enemyAI.enabled = false;
+        }
     }
 }

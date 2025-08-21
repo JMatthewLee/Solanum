@@ -13,13 +13,12 @@ public class TriggerEnterBroadCast : MonoBehaviour
             {
                 enemyController.WakeUp();
             }
-            //BLUEBERRY
-            Debug.Log("working");
-
-            foreach (EnemyValues enemyValues in EnemyValues.allEnemyValues)
-            {
-                enemyValues.WakeUp();
-            }
+            //BLUEBERRY - REMOVED: Blueberries should only wake up when player enters their individual detection zones
+            //Debug.Log("working");
+            //foreach (EnemyValues enemyValues in EnemyValues.allEnemyValues)
+            //{
+            //    enemyValues.WakeUp();
+            //}
 
         }
     }

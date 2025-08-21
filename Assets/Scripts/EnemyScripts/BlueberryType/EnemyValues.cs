@@ -33,11 +33,13 @@ public class EnemyValues : MonoBehaviour
         enemyCurrentHp = enemyMaxHp;
     }
 
-    public void TakeDamage(float damagetaken) //Maybe add A fixed update to check for DOT (Dmg Over Time) IN THE FUTURE FOR NOW LEAVE IT
+    public void TakeDamage(float damagetaken)
     {
-        WakeUp();
-        playerDetection.RestartEnemySleepCountdown();
-
+        if (playerDetection != null)
+        {
+            playerDetection.WakeUp();
+        }
+        
         enemyCurrentHp -= damagetaken;
         if (enemyCurrentHp <= 0)
         {
@@ -47,14 +49,11 @@ public class EnemyValues : MonoBehaviour
         }
         else
         {
-            dammageFlash.CallHitFlash(); //Play some sort of enemy hurt animation (MAYBE JUST ADD A WHITE 30% TO THE CURRENT SPRITE)
-            //Play enemy hurt sound (MAYBE LIKE A Squish?)
+            dammageFlash.CallHitFlash();
         }
     }
-    public void WakeUp()
-    {
-        playerDetection.ResetEnemyAwakeStatus();
-    }
+    
+    // REMOVED: WakeUp method - wake state is now managed by EnemyAI
 
     public void Death()//Called by animation event Destroy the game object once Death animation is finished
     {

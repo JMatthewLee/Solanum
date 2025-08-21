@@ -34,10 +34,11 @@ public class EnemyController : BaseEnemyMovement
     [SerializeField] private float stopThreshold = 0.1f; // Distance threshold to consider stopped
     [SerializeField] private float immediateAttackRange = 2f; // Very close range for immediate attack
     [SerializeField] private float landingCommitTime = 0.5f; // Time to commit to attack after landing
-    [SerializeField] private float blueberrySpeedModifier = 0.8f; // Blueberry-specific speed modifier (slower than player)
+    [SerializeField] private float blueberrySpeedModifier = 1.0f; // Blueberry speed modifier (same as player)
     [SerializeField] private float projectileAlignmentRadius = 3f; // Radius for positioning to align projectiles with player
     [SerializeField] private float alignmentTolerance = 15f; // Degrees tolerance for projectile alignment
     [SerializeField] private bool isBlueberryEnemy = false; // Manual override to identify blueberry enemies
+
     [SerializeField] private bool usePatrolMode = true; // Enable patrol mode for independent movement
     [SerializeField] private bool useNodeBasedPatrol = true; // Use node-based patrol instead of random movement
     [SerializeField] private Transform[] patrolNodes; // Array of patrol nodes to follow
@@ -106,6 +107,8 @@ public class EnemyController : BaseEnemyMovement
         return objectName.Contains("blueberry") || 
                objectName.Contains("blue");
     }
+    
+
     
     // Calculate optimal position for projectile alignment
     private Vector3 GetProjectileAlignmentPosition(Vector3 playerPosition, Vector3 currentPosition, float radius)
@@ -321,6 +324,8 @@ public class EnemyController : BaseEnemyMovement
         playerValueHp = GameObject.Find("Player").GetComponent<PlayerValues>();
         targetPlayer = GameObject.Find("Player").GetComponent<Transform>();
         
+
+        
         // Initialize patrol system
         spawnPosition = transform.position;
         needsNewPatrolPoint = true;
@@ -338,11 +343,21 @@ public class EnemyController : BaseEnemyMovement
     //-------------------------------------------AI---------------------------------------------------------------------------------------------------------
     public void StartAI()
     {
-        isAwake = true;
-        canAttack = true;
+        // Blueberry enemies start completely dormant, others start awake
+        if (IsBlueberry())
+        {
+            isAwake = false;
+            canAttack = false; // Can't attack while asleep
+            currentState = AttackState.Patrolling; // Start in patrol but won't move until awake
+        }
+        else
+        {
+            isAwake = true;
+            canAttack = true;
+            currentState = usePatrolMode ? AttackState.Patrolling : AttackState.Approaching;
+        }
+        
         attackLocked = false;
-        currentState = usePatrolMode ? AttackState.Patrolling : AttackState.Approaching;
-        Debug.Log($"Enemy {gameObject.name}: Initial state set to {currentState}");
         attacksPerformed = 0;
         needsNewStrategicPosition = true;
         landingTimer = 0f;
@@ -359,48 +374,42 @@ public class EnemyController : BaseEnemyMovement
             needsTacticalPosition = true;
             isMovingToNextNode = true;
         }
-        
-        Debug.Log($"Enemy {gameObject.name}: AI Started - State: {currentState}, CanAttack: {canAttack}, PatrolMode: {usePatrolMode}, NodeBased: {useNodeBasedPatrol}");
     }
 
-    void FixedUpdate()
+        void FixedUpdate()
     {
-        if (targetPlayer != null && isAwake && !attackLocked)
+        if (targetPlayer != null)
         {
             float distanceToPlayer = Vector2.Distance(transform.position, targetPlayer.position);
             
-            // Debug: Log current state and conditions
-            if (currentState == AttackState.Attacking)
+            // Only process AI logic if the enemy is awake
+            if (isAwake && !attackLocked)
             {
-                Debug.Log($"Enemy {gameObject.name}: In FixedUpdate - State: {currentState}, CanAttack: {canAttack}, AttackLocked: {attackLocked}");
-            }
-            
-            UpdateAttackState(distanceToPlayer);
-            ExecuteCurrentState(distanceToPlayer);
-            
-            // Handle landing commitment timer
-            if (hasLanded && currentState != AttackState.Attacking)
-            {
-                landingTimer += Time.fixedDeltaTime;
-                if (landingTimer >= landingCommitTime)
+                UpdateAttackState(distanceToPlayer);
+                ExecuteCurrentState(distanceToPlayer);
+                
+                // Handle landing commitment timer
+                if (hasLanded && currentState != AttackState.Attacking)
                 {
-                    // Commit to attack after landing
-                    if (canAttack && !attackLocked)
+                    landingTimer += Time.fixedDeltaTime;
+                    if (landingTimer >= landingCommitTime)
                     {
-                        Debug.Log($"Enemy {gameObject.name}: Committing to attack after landing");
-                        StartAttack();
+                        // Commit to attack after landing
+                        if (canAttack && !attackLocked)
+                        {
+                            StartAttack();
+                        }
                     }
                 }
-            }
-            
-            // Handle attack timeout (fallback if animation event never fires)
-            if (currentState == AttackState.Attacking && attackLocked)
-            {
-                float timeSinceAttackStarted = Time.time - attackStartTime;
-                if (timeSinceAttackStarted > minimumAttackDuration + 1f) // Give extra 1 second buffer
+                
+                // Handle attack timeout (fallback if animation event never fires)
+                if (currentState == AttackState.Attacking && attackLocked)
                 {
-                    Debug.Log($"Enemy {gameObject.name}: Attack timeout reached ({timeSinceAttackStarted:F2}s), forcing attack finish");
-                    attackFinish();
+                    float timeSinceAttackStarted = Time.time - attackStartTime;
+                    if (timeSinceAttackStarted > minimumAttackDuration + 1f) // Give extra 1 second buffer
+                    {
+                        attackFinish();
+                    }
                 }
             }
         }
@@ -433,7 +442,6 @@ public class EnemyController : BaseEnemyMovement
             case AttackState.Approaching:
                 if (distanceToPlayer <= attackRange)
                 {
-                    Debug.Log($"Enemy {gameObject.name}: Transitioning to Attacking state at distance {distanceToPlayer:F2}");
                     currentState = AttackState.Attacking;
                     stateTimer = 0f;
                     hasLanded = true;
@@ -464,7 +472,6 @@ public class EnemyController : BaseEnemyMovement
             case AttackState.Returning:
                 if (distanceToPlayer <= attackRange)
                 {
-                    Debug.Log($"Enemy {gameObject.name}: Transitioning to Attacking state from Returning at distance {distanceToPlayer:F2}");
                     currentState = AttackState.Attacking;
                     stateTimer = 0f;
                     hasLanded = true;
@@ -491,10 +498,8 @@ public class EnemyController : BaseEnemyMovement
                 
             case AttackState.Attacking:
                 // Start the attack if we can
-                Debug.Log($"Enemy {gameObject.name}: In ExecuteCurrentState - Attacking case, CanAttack: {canAttack}, AttackLocked: {attackLocked}");
                 if (canAttack && !attackLocked)
                 {
-                    Debug.Log($"Enemy {gameObject.name}: Calling StartAttack() from ExecuteCurrentState");
                     StartAttack();
                 }
                 break;
@@ -516,11 +521,7 @@ public class EnemyController : BaseEnemyMovement
                 break;
         }
         
-        // Debug logging for state transitions
-        if (isAwake && targetPlayer != null && currentState == AttackState.Attacking && canAttack && !attackLocked)
-        {
-            Debug.Log($"Enemy {gameObject.name}: Ready to attack! Distance={distanceToPlayer:F2}");
-        }
+
     }
 
     //-----------------------------------MOVEMENT STATES--------------------------------------------------------------------------------------------------------------------------------------
@@ -537,8 +538,14 @@ public class EnemyController : BaseEnemyMovement
         }
     }
     
-    private void PatrolUsingNodes()
+        private void PatrolUsingNodes()
     {
+        // Dormant blueberry enemies don't patrol
+        if (IsBlueberry() && !isAwake)
+        {
+            return;
+        }
+        
         // Check if we need to move to next node
         if (isMovingToNextNode)
         {
@@ -588,30 +595,29 @@ public class EnemyController : BaseEnemyMovement
                 }
             }
             
-                         // Check if we've reached the target
-             float distanceToTarget = Vector2.Distance(transform.position, currentPatrolTarget);
-             if (distanceToTarget <= nodeReachThreshold)
-             {
-                 // Reached the target, start waiting and check if we should attack
-                 StopMovement();
-                 isMovingToNextNode = false;
-                 patrolTimer = 0f;
-                 
-                 // Always attack when reaching a node (regardless of player range)
-                 if (canAttack && !attackLocked)
-                 {
-                     // Attack from this node even if player is not in range
-                     currentState = AttackState.Attacking;
-                     canAttack = true;
-                     attackLocked = false;
-                     hasLanded = true;
-                     landingTimer = 0f;
-                     
-                     // Immediately start the attack since we're already in the right state
-                     Debug.Log($"Enemy {gameObject.name}: Node reached, calling StartAttack()");
-                     StartAttack();
-                 }
-             }
+            // Check if we've reached the target
+            float distanceToTarget = Vector2.Distance(transform.position, currentPatrolTarget);
+            if (distanceToTarget <= nodeReachThreshold)
+            {
+                // Reached the target, start waiting and check if we should attack
+                StopMovement();
+                isMovingToNextNode = false;
+                patrolTimer = 0f;
+                
+                // Always attack when reaching a node (regardless of player range)
+                if (canAttack && !attackLocked)
+                {
+                    // Attack from this node even if player is not in range
+                    currentState = AttackState.Attacking;
+                    canAttack = true;
+                    attackLocked = false;
+                    hasLanded = true;
+                    landingTimer = 0f;
+                    
+                    // Immediately start the attack since we're already in the right state
+                    StartAttack();
+                }
+            }
         }
         else
         {
@@ -639,6 +645,12 @@ public class EnemyController : BaseEnemyMovement
     
     private void PatrolRandomly()
     {
+        // Dormant blueberry enemies don't patrol
+        if (IsBlueberry() && !isAwake)
+        {
+            return;
+        }
+        
         if (needsNewPatrolPoint)
         {
             currentPatrolTarget = GetNewPatrolPoint();
@@ -896,19 +908,13 @@ public class EnemyController : BaseEnemyMovement
 
     void StartAttack()
     {
-        Debug.Log($"Enemy {gameObject.name}: StartAttack() called - CanAttack: {canAttack}, AttacksPerformed: {attacksPerformed}, MaxAttacks: {maxAttacksPerEngagement}");
-        
         if (canAttack && attacksPerformed < maxAttacksPerEngagement)
         {
-            Debug.Log($"Enemy {gameObject.name}: Starting attack #{attacksPerformed + 1}");
-            
             // Completely stop all movement before attacking
             StopMovement();
             
             // Set attack animation
-            Debug.Log($"Enemy {gameObject.name}: About to set IsAttacking to true. Animator null? {enemyAnimator == null}");
             enemyAnimator.SetBool("IsAttacking", true);
-            Debug.Log($"Enemy {gameObject.name}: Set IsAttacking to true");
             
             canAttack = false;
             attackLocked = true;
@@ -922,10 +928,6 @@ public class EnemyController : BaseEnemyMovement
             //ATTACK LOGIC WILL BE CALLED IN ANIMATION EVENT IN SEPERATE SCRIPT
             //enemyAttackScript.Attack(); LIKE THIS BUT BY ANIMATION EVENT
         }
-        else
-        {
-            Debug.LogWarning($"Enemy {gameObject.name}: Cannot attack - CanAttack: {canAttack}, AttacksPerformed: {attacksPerformed}, MaxAttacks: {maxAttacksPerEngagement}");
-        }
     }
 
     public void attackFinish()
@@ -934,11 +936,9 @@ public class EnemyController : BaseEnemyMovement
         float timeSinceAttackStarted = Time.time - attackStartTime;
         if (timeSinceAttackStarted < minimumAttackDuration)
         {
-            Debug.Log($"Enemy {gameObject.name}: attackFinish() called too early ({timeSinceAttackStarted:F2}s), ignoring. Need at least {minimumAttackDuration}s");
             return; // Don't finish attack yet
         }
         
-        Debug.Log($"Enemy {gameObject.name}: attackFinish() called - resetting attack state after {timeSinceAttackStarted:F2}s");
         enemyAnimator.SetBool("IsAttacking", false);
         canAttack = true;
         attackLocked = false;
@@ -966,7 +966,6 @@ public class EnemyController : BaseEnemyMovement
                 isMovingToNextNode = true;
                 needsTacticalPosition = true;
                 randomShootTimer = 0f; // Reset random shoot timer for new movement
-                Debug.Log($"Enemy {gameObject.name}: Immediately moving to next node after attack");
             }
         }
         else
@@ -985,14 +984,17 @@ public class EnemyController : BaseEnemyMovement
         // Set IsMoving to true before the attack animation finishes
         // This ensures the enemy is ready to move immediately after shooting
         enemyAnimator.SetBool("IsMoving", true);
-        Debug.Log($"Enemy {gameObject.name}: Preparing for movement - IsMoving set to true");
     }
 
     //--------------------------------DAMAGE RECEIVING------------------------------------------------------------------------------------------------------------------------------------
 
     public void TakeDamage(float damagetaken) //Maybe add A fixed update to check for DOT (Dmg Over Time) IN THE FUTURE FOR NOW LEAVE IT
     {
-        WakeUp();
+        // Only wake up if we're not already awake or if this is a non-blueberry enemy
+        if (!isAwake || !IsBlueberry())
+        {
+            WakeUp();
+        }
 
         enemyCurrentHp -= damagetaken;
         if (enemyCurrentHp <= 0)
@@ -1015,7 +1017,35 @@ public class EnemyController : BaseEnemyMovement
 
     public void WakeUp()
     {
+        // For blueberry enemies, we need to manually set the awake state
+        if (IsBlueberry())
+        {
+            isAwake = true;
+            canAttack = true;
+        }
+        
+        // Call the communicator but then immediately re-verify our state
         enemyStateCommunicator.WakeUp();
+        
+        // Double-check that our state wasn't overridden
+        if (IsBlueberry())
+        {
+            if (!isAwake || !canAttack)
+            {
+                isAwake = true;
+                canAttack = true;
+            }
+        }
+    }
+    
+    // Method to force blueberry enemies to stay asleep (called from external systems)
+    public void ForceAsleep()
+    {
+        if (IsBlueberry())
+        {
+            isAwake = false;
+            canAttack = false;
+        }
     }
 
     public void Death()//Called by animation event Destroy the game object once Death animation is finished

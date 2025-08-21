@@ -22,7 +22,12 @@ public class BlueBerryCommunicator : MonoBehaviour
 
     public void WakeUpFinish()
     {
-        enemyAI.WakeUp();
+        if (enemyAI != null)
+        {
+            // Enable the EnemyAI script component so it can run
+            enemyAI.enabled = true;
+            enemyAI.WakeUp();
+        }
     }
 
     public void Death()
