@@ -1,0 +1,101 @@
+[gd_resource type="SpriteFrames" load_steps=13 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/tom_hat.png" id="tex_0"]
+
+[sub_resource type="AtlasTexture" id="Atlas_idle_0"]
+atlas = ExtResource("tex_0")
+region = Rect2(96, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_idle_1"]
+atlas = ExtResource("tex_0")
+region = Rect2(0, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_idle_2"]
+atlas = ExtResource("tex_0")
+region = Rect2(32, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_idle_3"]
+atlas = ExtResource("tex_0")
+region = Rect2(64, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_move_4"]
+atlas = ExtResource("tex_0")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_move_5"]
+atlas = ExtResource("tex_0")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_move_6"]
+atlas = ExtResource("tex_0")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_move_7"]
+atlas = ExtResource("tex_0")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_move_8"]
+atlas = ExtResource("tex_0")
+region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_move_9"]
+atlas = ExtResource("tex_0")
+region = Rect2(192, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_move_10"]
+atlas = ExtResource("tex_0")
+region = Rect2(224, 0, 32, 32)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 0.0833,
+"texture": SubResource("Atlas_idle_0")
+}, {
+"duration": 0.0833,
+"texture": SubResource("Atlas_idle_1")
+}, {
+"duration": 0.0833,
+"texture": SubResource("Atlas_idle_2")
+}, {
+"duration": 0.0833,
+"texture": SubResource("Atlas_idle_3")
+}, {
+"duration": 0.0500,
+"texture": SubResource("Atlas_idle_3")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 1.0}, {
+"frames": [{
+"duration": 0.0667,
+"texture": SubResource("Atlas_move_4")
+}, {
+"duration": 0.0667,
+"texture": SubResource("Atlas_move_5")
+}, {
+"duration": 0.0667,
+"texture": SubResource("Atlas_move_6")
+}, {
+"duration": 0.0667,
+"texture": SubResource("Atlas_move_7")
+}, {
+"duration": 0.0667,
+"texture": SubResource("Atlas_move_8")
+}, {
+"duration": 0.0667,
+"texture": SubResource("Atlas_move_9")
+}, {
+"duration": 0.0333,
+"texture": SubResource("Atlas_move_10")
+}, {
+"duration": 0.0333,
+"texture": SubResource("Atlas_move_4")
+}, {
+"duration": 0.0500,
+"texture": SubResource("Atlas_move_4")
+}],
+"loop": true,
+"name": &"move",
+"speed": 1.0
+}]

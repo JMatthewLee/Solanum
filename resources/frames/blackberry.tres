@@ -1,0 +1,157 @@
+[gd_resource type="SpriteFrames" load_steps=19 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/blackberry.png" id="tex_0"]
+
+[sub_resource type="AtlasTexture" id="Atlas_idle_0"]
+atlas = ExtResource("tex_0")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_idle_1"]
+atlas = ExtResource("tex_0")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_idle_2"]
+atlas = ExtResource("tex_0")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_idle_3"]
+atlas = ExtResource("tex_0")
+region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_move_4"]
+atlas = ExtResource("tex_0")
+region = Rect2(768, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_move_5"]
+atlas = ExtResource("tex_0")
+region = Rect2(800, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_move_6"]
+atlas = ExtResource("tex_0")
+region = Rect2(832, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_attack_7"]
+atlas = ExtResource("tex_0")
+region = Rect2(192, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_attack_8"]
+atlas = ExtResource("tex_0")
+region = Rect2(224, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_attack_9"]
+atlas = ExtResource("tex_0")
+region = Rect2(256, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_attack_10"]
+atlas = ExtResource("tex_0")
+region = Rect2(288, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_attack_11"]
+atlas = ExtResource("tex_0")
+region = Rect2(320, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_attack_12"]
+atlas = ExtResource("tex_0")
+region = Rect2(352, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_attack_13"]
+atlas = ExtResource("tex_0")
+region = Rect2(384, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_death_14"]
+atlas = ExtResource("tex_0")
+region = Rect2(448, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_death_15"]
+atlas = ExtResource("tex_0")
+region = Rect2(480, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_death_16"]
+atlas = ExtResource("tex_0")
+region = Rect2(512, 0, 32, 32)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 0.0833,
+"texture": SubResource("Atlas_idle_0")
+}, {
+"duration": 0.0833,
+"texture": SubResource("Atlas_idle_1")
+}, {
+"duration": 0.0833,
+"texture": SubResource("Atlas_idle_2")
+}, {
+"duration": 0.0833,
+"texture": SubResource("Atlas_idle_3")
+}, {
+"duration": 0.0500,
+"texture": SubResource("Atlas_idle_3")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 1.0}, {
+"frames": [{
+"duration": 0.0833,
+"texture": SubResource("Atlas_move_4")
+}, {
+"duration": 0.0833,
+"texture": SubResource("Atlas_move_5")
+}, {
+"duration": 0.0833,
+"texture": SubResource("Atlas_move_6")
+}, {
+"duration": 0.0500,
+"texture": SubResource("Atlas_move_6")
+}],
+"loop": true,
+"name": &"move",
+"speed": 1.0}, {
+"frames": [{
+"duration": 0.0833,
+"texture": SubResource("Atlas_attack_7")
+}, {
+"duration": 0.0833,
+"texture": SubResource("Atlas_attack_8")
+}, {
+"duration": 0.0833,
+"texture": SubResource("Atlas_attack_9")
+}, {
+"duration": 0.0833,
+"texture": SubResource("Atlas_attack_10")
+}, {
+"duration": 0.0833,
+"texture": SubResource("Atlas_attack_11")
+}, {
+"duration": 0.0833,
+"texture": SubResource("Atlas_attack_12")
+}, {
+"duration": 0.0833,
+"texture": SubResource("Atlas_attack_13")
+}, {
+"duration": 0.0500,
+"texture": SubResource("Atlas_attack_13")
+}],
+"loop": false,
+"name": &"attack",
+"speed": 1.0}, {
+"frames": [{
+"duration": 0.0833,
+"texture": SubResource("Atlas_death_14")
+}, {
+"duration": 0.0833,
+"texture": SubResource("Atlas_death_15")
+}, {
+"duration": 0.0833,
+"texture": SubResource("Atlas_death_16")
+}, {
+"duration": 0.0833,
+"texture": SubResource("Atlas_death_15")
+}, {
+"duration": 0.0500,
+"texture": SubResource("Atlas_death_15")
+}],
+"loop": false,
+"name": &"death",
+"speed": 1.0
+}]

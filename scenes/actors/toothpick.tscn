@@ -1,0 +1,28 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/projectile.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/sprites/toothpick.png" id="2_tex"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hit"]
+size = Vector2(10, 4)
+
+[node name="Toothpick" type="Area2D"]
+collision_layer = 16
+collision_mask = 5
+monitoring = false
+script = ExtResource("1_script")
+hits_enemies = true
+hits_player = false
+speed = 160.0
+damage = 3
+lifetime = 12.0
+rotation_offset = -0.785398
+break_color = Color(0.95, 0.86, 0.45, 1)
+
+[node name="Sprite" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("2_tex")
+
+[node name="Collision" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_hit")
+disabled = true

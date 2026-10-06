@@ -1,0 +1,60 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/hud.gd" id="1_hud"]
+[ext_resource type="FontFile" path="res://assets/fonts/dogicapixelbold.ttf" id="2_font"]
+[ext_resource type="Texture2D" path="res://assets/ui/panel.png" id="3_panel"]
+
+[node name="HUD" type="CanvasLayer"]
+script = ExtResource("1_hud")
+
+[node name="Margin" type="MarginContainer" parent="."]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 148.0
+offset_bottom = 78.0
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 6
+
+[node name="Panel" type="NinePatchRect" parent="Margin"]
+layout_mode = 2
+texture = ExtResource("3_panel")
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 2
+patch_margin_bottom = 2
+
+[node name="Stats" type="VBoxContainer" parent="Margin/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = 6.0
+offset_right = -8.0
+offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 2
+
+[node name="Hp" type="Label" parent="Margin/Panel/Stats"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.93, 0.86, 1)
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 8
+text = "HP 5/5"
+
+[node name="Coins" type="Label" parent="Margin/Panel/Stats"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.86, 0.35, 1)
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 8
+text = "0g"
+
+[node name="Enemies" type="Label" parent="Margin/Panel/Stats"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.86, 0.93, 0.78, 1)
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 8
+text = "Enemies 0"

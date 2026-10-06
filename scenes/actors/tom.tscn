@@ -1,0 +1,45 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://scripts/tom.gd" id="1_tom"]
+[ext_resource type="SpriteFrames" path="res://resources/frames/tom_body.tres" id="2_body"]
+[ext_resource type="SpriteFrames" path="res://resources/frames/tom_hat.tres" id="3_hat"]
+[ext_resource type="Texture2D" path="res://assets/sprites/tom_shadow.png" id="4_shadow"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_body"]
+radius = 10.0
+
+[node name="Tom" type="CharacterBody2D" groups=["player"]]
+collision_layer = 2
+collision_mask = 1
+motion_mode = 1
+script = ExtResource("1_tom")
+
+[node name="Collision" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_body")
+
+[node name="Shadow" type="Sprite2D" parent="."]
+modulate = Color(1, 1, 1, 0.55)
+texture_filter = 1
+position = Vector2(0, 8)
+texture = ExtResource("4_shadow")
+
+[node name="Body" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+sprite_frames = ExtResource("2_body")
+animation = &"idle"
+autoplay = "idle"
+
+[node name="Hat" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+sprite_frames = ExtResource("3_hat")
+animation = &"idle"
+autoplay = "idle"
+
+[node name="Muzzle" type="Node2D" parent="."]
+
+[node name="Spawn" type="Marker2D" parent="Muzzle"]
+position = Vector2(16, 0)
+
+[node name="Camera" type="Camera2D" parent="."]
+position_smoothing_enabled = true
+position_smoothing_speed = 8.0

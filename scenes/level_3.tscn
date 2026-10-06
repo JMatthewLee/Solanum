@@ -1,0 +1,233 @@
+[gd_scene load_steps=26 format=3]
+
+[ext_resource type="Script" path="res://scripts/garden.gd" id="garden"]
+[ext_resource type="TileSet" path="res://resources/tiles/garden_visual.tres" id="visual"]
+[ext_resource type="TileSet" path="res://resources/tiles/garden_solid.tres" id="solid"]
+[ext_resource type="PackedScene" path="res://scenes/hud.tscn" id="hud"]
+[ext_resource type="PackedScene" path="res://scenes/actors/tom.tscn" id="tom"]
+[ext_resource type="PackedScene" path="res://scenes/actors/blueberry.tscn" id="blueberry"]
+[ext_resource type="PackedScene" path="res://scenes/actors/raspberry.tscn" id="raspberry"]
+[ext_resource type="PackedScene" path="res://scenes/actors/blackberry.tscn" id="blackberry"]
+[ext_resource type="PackedScene" path="res://scenes/actors/coin.tscn" id="coin"]
+[ext_resource type="Script" path="res://scripts/projectile_pool.gd" id="pool"]
+[ext_resource type="PackedScene" path="res://scenes/actors/toothpick.tscn" id="toothpick"]
+[ext_resource type="PackedScene" path="res://scenes/actors/berry_shot.tscn" id="berry_shot"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wake"]
+size = Vector2(64, 64)
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_0"]
+vertices = PackedVector2Array(-256, -192, 192, -192, 192, -128, -256, -128)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-256, -192, 192, -192, 192, -128, -256, -128)])
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_1"]
+vertices = PackedVector2Array(256, -192, 320, -192, 320, 0, 256, 0)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(256, -192, 320, -192, 320, 0, 256, 0)])
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_2"]
+vertices = PackedVector2Array(-256, -128, -192, -128, -192, -64, -256, -64)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-256, -128, -192, -128, -192, -64, -256, -64)])
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_3"]
+vertices = PackedVector2Array(128, -128, 192, -128, 192, -64, 128, -64)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(128, -128, 192, -128, 192, -64, 128, -64)])
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_4"]
+vertices = PackedVector2Array(-256, -64, 192, -64, 192, -32, -256, -32)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-256, -64, 192, -64, 192, -32, -256, -32)])
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_5"]
+vertices = PackedVector2Array(-256, -32, 32, -32, 32, 160, -256, 160)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-256, -32, 32, -32, 32, 160, -256, 160)])
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_6"]
+vertices = PackedVector2Array(96, -32, 192, -32, 192, 0, 96, 0)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(96, -32, 192, -32, 192, 0, 96, 0)])
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_7"]
+vertices = PackedVector2Array(96, 0, 320, 0, 320, 32, 96, 32)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(96, 0, 320, 0, 320, 32, 96, 32)])
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_8"]
+vertices = PackedVector2Array(96, 32, 128, 32, 128, 96, 96, 96)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(96, 32, 128, 32, 128, 96, 96, 96)])
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_9"]
+vertices = PackedVector2Array(288, 32, 320, 32, 320, 96, 288, 96)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(288, 32, 320, 32, 320, 96, 288, 96)])
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_10"]
+vertices = PackedVector2Array(96, 96, 320, 96, 320, 160, 96, 160)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(96, 96, 320, 96, 320, 160, 96, 160)])
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_11"]
+vertices = PackedVector2Array(-256, 160, 320, 160, 320, 192, -256, 192)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-256, 160, 320, 160, 320, 192, -256, 192)])
+
+[node name="Level3" type="Node2D"]
+script = ExtResource("garden")
+camera_limits = Rect2(-256, -192, 576, 384)
+next_scene = "res://scenes/title.tscn"
+clear_message = "The garden is clear"
+
+[node name="Floor" type="TileMapLayer" parent="."]
+z_index = -20
+tile_set = ExtResource("visual")
+tile_map_data = PackedByteArray("+P/6/wAAAQACAAAA+f/6/wAAAQACAAAA+v/6/wAAAQACAAAA+//6/wAAAQACAAAA/P/6/wAAAwABAAAA/f/6/wAAAwABAAAA/v/6/wAAAgACAAAA///6/wAAAgACAAAAAAD6/wAAAgABAAAAAQD6/wAAAgABAAAAAgD6/wAAAgACAAAAAwD6/wAAAgACAAAABAD6/wAAAQAAAAAABQD6/wAAAQAAAAAABgD6/wAAAwACAAAABwD6/wAAAwACAAAACAD6/wAAAAAEAAAACQD6/wAAAAAEAAAA+P/7/wAAAQACAAAA+f/7/wAAAQACAAAA+v/7/wAAAQACAAAA+//7/wAAAQACAAAA/P/7/wAAAwABAAAA/f/7/wAAAwABAAAA/v/7/wAAAgACAAAA///7/wAAAgACAAAAAAD7/wAAAgABAAAAAQD7/wAAAgABAAAAAgD7/wAAAgACAAAAAwD7/wAAAgACAAAABAD7/wAAAQAAAAAABQD7/wAAAQAAAAAABgD7/wAAAwACAAAABwD7/wAAAwACAAAACAD7/wAAAAAEAAAACQD7/wAAAAAEAAAA+P/8/wAAAgABAAAA+f/8/wAAAgABAAAA+v/8/wAAAgADAAAA+//8/wAAAgADAAAA/P/8/wAAAgAEAAAA/f/8/wAAAgAEAAAA/v/8/wAAAQAEAAAA///8/wAAAQAEAAAAAAD8/wAAAQACAAAAAQD8/wAAAQACAAAAAgD8/wAABgAAAAAAAwD8/wAABgAAAAAABAD8/wAAAAABAAAABQD8/wAAAAABAAAABgD8/wAAAgAAAAAABwD8/wAAAgAAAAAACAD8/wAAAgAAAAAACQD8/wAAAgAAAAAA+P/9/wAAAgABAAAA+f/9/wAAAgABAAAA+v/9/wAAAgADAAAA+//9/wAAAgADAAAA/P/9/wAAAgAEAAAA/f/9/wAAAgAEAAAA/v/9/wAAAQAEAAAA///9/wAAAQAEAAAAAAD9/wAAAQACAAAAAQD9/wAAAQACAAAAAgD9/wAABgAAAAAAAwD9/wAABgAAAAAABAD9/wAAAAABAAAABQD9/wAAAAABAAAABgD9/wAAAgAAAAAABwD9/wAAAgAAAAAACAD9/wAAAgAAAAAACQD9/wAAAgAAAAAA+P/+/wAAAwAAAAAA+f/+/wAAAwAAAAAA+v/+/wAAAQAEAAAA+//+/wAAAQAEAAAA/P/+/wAAAgAEAAAA/f/+/wAAAgAEAAAA/v/+/wAAAQAAAAAA///+/wAAAQAAAAAAAAD+/wAAAQABAAAAAQD+/wAAAQABAAAAAgD+/wAAAAAEAAAAAwD+/wAAAAAEAAAABAD+/wAAAwACAAAABQD+/wAAAwACAAAABgD+/wAAAwAAAAAABwD+/wAAAwAAAAAACAD+/wAAAAADAAAACQD+/wAAAAADAAAA+P///wAAAwAAAAAA+f///wAAAwAAAAAA+v///wAAAQAEAAAA+////wAAAQAEAAAA/P///wAAAgAEAAAA/f///wAAAgAEAAAA/v///wAAAQAAAAAA/////wAAAQAAAAAAAAD//wAAAQABAAAAAQD//wAAAQABAAAAAgD//wAAAAAEAAAAAwD//wAAAAAEAAAABAD//wAAAwACAAAABQD//wAAAwACAAAABgD//wAAAwAAAAAABwD//wAAAwAAAAAACAD//wAAAAADAAAACQD//wAAAAADAAAA+P8AAAAAAgABAAAA+f8AAAAAAgABAAAA+v8AAAAAAgACAAAA+/8AAAAAAgACAAAA/P8AAAAABgAAAAAA/f8AAAAABgAAAAAA/v8AAAAAAQACAAAA//8AAAAAAQACAAAAAAAAAAAAAQACAAAAAQAAAAAAAQACAAAAAgAAAAAABgAAAAAAAwAAAAAABgAAAAAABAAAAAAAAgACAAAABQAAAAAAAgACAAAABgAAAAAAAgABAAAABwAAAAAAAgABAAAACAAAAAAAAgACAAAACQAAAAAAAgACAAAA+P8BAAAAAgABAAAA+f8BAAAAAgABAAAA+v8BAAAAAgACAAAA+/8BAAAAAgACAAAA/P8BAAAABgAAAAAA/f8BAAAABgAAAAAA/v8BAAAAAQACAAAA//8BAAAAAQACAAAAAAABAAAAAQACAAAAAQABAAAAAQACAAAAAgABAAAABgAAAAAAAwABAAAABgAAAAAABAABAAAAAgACAAAABQABAAAAAgACAAAABgABAAAAAgABAAAABwABAAAAAgABAAAACAABAAAAAgACAAAACQABAAAAAgACAAAA+P8CAAAAAQAAAAAA+f8CAAAAAQAAAAAA+v8CAAAAAwACAAAA+/8CAAAAAwACAAAA/P8CAAAAAAAEAAAA/f8CAAAAAAAEAAAA/v8CAAAAAQABAAAA//8CAAAAAQABAAAAAAACAAAAAgADAAAAAQACAAAAAgADAAAAAgACAAAAAgAEAAAAAwACAAAAAgAEAAAABAACAAAAAQAEAAAABQACAAAAAQAEAAAABgACAAAAAwAAAAAABwACAAAAAwAAAAAACAACAAAABgAAAAAACQACAAAABgAAAAAA+P8DAAAAAQAAAAAA+f8DAAAAAQAAAAAA+v8DAAAAAwACAAAA+/8DAAAAAwACAAAA/P8DAAAAAAAEAAAA/f8DAAAAAAAEAAAA/v8DAAAAAQABAAAA//8DAAAAAQABAAAAAAADAAAAAgADAAAAAQADAAAAAgADAAAAAgADAAAAAgAEAAAAAwADAAAAAgAEAAAABAADAAAAAQAEAAAABQADAAAAAQAEAAAABgADAAAAAwAAAAAABwADAAAAAwAAAAAACAADAAAABgAAAAAACQADAAAABgAAAAAA+P8EAAAAAgAAAAAA+f8EAAAAAgAAAAAA+v8EAAAAAAABAAAA+/8EAAAAAAABAAAA/P8EAAAABgAAAAAA/f8EAAAABgAAAAAA/v8EAAAAAwAAAAAA//8EAAAAAwAAAAAAAAAEAAAAAQAEAAAAAQAEAAAAAQAEAAAAAgAEAAAAAgAEAAAAAwAEAAAAAgAEAAAABAAEAAAAAgADAAAABQAEAAAAAgADAAAABgAEAAAAAQABAAAABwAEAAAAAQABAAAACAAEAAAAAAAEAAAACQAEAAAAAAAEAAAA+P8FAAAAAgAAAAAA+f8FAAAAAgAAAAAA+v8FAAAAAAABAAAA+/8FAAAAAAABAAAA/P8FAAAABgAAAAAA/f8FAAAABgAAAAAA/v8FAAAAAwAAAAAA//8FAAAAAwAAAAAAAAAFAAAAAQAEAAAAAQAFAAAAAQAEAAAAAgAFAAAAAgAEAAAAAwAFAAAAAgAEAAAABAAFAAAAAgADAAAABQAFAAAAAgADAAAABgAFAAAAAQABAAAABwAFAAAAAQABAAAACAAFAAAAAAAEAAAACQAFAAAAAAAEAAAA")
+
+[node name="Water" type="TileMapLayer" parent="."]
+z_index = -10
+tile_set = ExtResource("solid")
+tile_map_data = PackedByteArray("+v/8/wAACgAAAAAA+v/9/wAACgACAAAA+//8/wAACwAAAAAA+//9/wAACwACAAAA/P/8/wAACwAAAAAA/P/9/wAACwACAAAA/f/8/wAACwAAAAAA/f/9/wAACwACAAAA/v/8/wAACwAAAAAA/v/9/wAACwACAAAA///8/wAACwAAAAAA///9/wAACwACAAAAAAD8/wAACwAAAAAAAAD9/wAACwACAAAAAQD8/wAACwAAAAAAAQD9/wAACwACAAAAAQD//wAACgAAAAAAAQAAAAAACgABAAAAAQABAAAACgABAAAAAQACAAAACgABAAAAAQADAAAACgABAAAAAQAEAAAACgACAAAAAgD8/wAACwAAAAAAAgD9/wAACwACAAAAAgD//wAADAAAAAAAAgAAAAAADAABAAAAAgABAAAADAABAAAAAgACAAAADAABAAAAAgADAAAADAABAAAAAgAEAAAADAACAAAAAwD8/wAADAAAAAAAAwD9/wAADAACAAAABAABAAAACgAAAAAABAACAAAACgACAAAABQABAAAACwAAAAAABQACAAAACwACAAAABgD6/wAACgAAAAAABgD7/wAACgABAAAABgD8/wAACgABAAAABgD9/wAACgABAAAABgD+/wAACgABAAAABgD//wAACgACAAAABgABAAAACwAAAAAABgACAAAACwACAAAABwD6/wAADAAAAAAABwD7/wAADAABAAAABwD8/wAADAABAAAABwD9/wAADAABAAAABwD+/wAADAABAAAABwD//wAADAACAAAABwABAAAACwAAAAAABwACAAAACwACAAAACAABAAAADAAAAAAACAACAAAADAACAAAA")
+
+[node name="Edge" type="TileMapLayer" parent="."]
+z_index = -5
+tile_set = ExtResource("solid")
+tile_map_data = PackedByteArray("9v/4/wAABgAAAAAA9//4/wAABgAAAAAA+P/4/wAABgAAAAAA+f/4/wAABgAAAAAA+v/4/wAABgAAAAAA+//4/wAABgAAAAAA/P/4/wAABgAAAAAA/f/4/wAABgAAAAAA/v/4/wAABgAAAAAA///4/wAABgAAAAAAAAD4/wAABgAAAAAAAQD4/wAABgAAAAAAAgD4/wAABgAAAAAAAwD4/wAABgAAAAAABAD4/wAABgAAAAAABQD4/wAABgAAAAAABgD4/wAABgAAAAAABwD4/wAABgAAAAAACAD4/wAABgAAAAAACQD4/wAABgAAAAAACgD4/wAABgAAAAAACwD4/wAABgAAAAAA9v/5/wAABgAAAAAA9//5/wAABgAAAAAA+P/5/wAABgAAAAAA+f/5/wAABgAAAAAA+v/5/wAABgAAAAAA+//5/wAABgAAAAAA/P/5/wAABgAAAAAA/f/5/wAABgAAAAAA/v/5/wAABgAAAAAA///5/wAABgAAAAAAAAD5/wAABgAAAAAAAQD5/wAABgAAAAAAAgD5/wAABgAAAAAAAwD5/wAABgAAAAAABAD5/wAABgAAAAAABQD5/wAABgAAAAAABgD5/wAABgAAAAAABwD5/wAABgAAAAAACAD5/wAABgAAAAAACQD5/wAABgAAAAAACgD5/wAABgAAAAAACwD5/wAABgAAAAAA9v/6/wAABgAAAAAA9//6/wAABgAAAAAACgD6/wAABgAAAAAACwD6/wAABgAAAAAA9v/7/wAABgAAAAAA9//7/wAABgAAAAAACgD7/wAABgAAAAAACwD7/wAABgAAAAAA9v/8/wAABgAAAAAA9//8/wAABgAAAAAACgD8/wAABgAAAAAACwD8/wAABgAAAAAA9v/9/wAABgAAAAAA9//9/wAABgAAAAAACgD9/wAABgAAAAAACwD9/wAABgAAAAAA9v/+/wAABgAAAAAA9//+/wAABgAAAAAACgD+/wAABgAAAAAACwD+/wAABgAAAAAA9v///wAABgAAAAAA9////wAABgAAAAAACgD//wAABgAAAAAACwD//wAABgAAAAAA9v8AAAAABgAAAAAA9/8AAAAABgAAAAAACgAAAAAABgAAAAAACwAAAAAABgAAAAAA9v8BAAAABgAAAAAA9/8BAAAABgAAAAAACgABAAAABgAAAAAACwABAAAABgAAAAAA9v8CAAAABgAAAAAA9/8CAAAABgAAAAAACgACAAAABgAAAAAACwACAAAABgAAAAAA9v8DAAAABgAAAAAA9/8DAAAABgAAAAAACgADAAAABgAAAAAACwADAAAABgAAAAAA9v8EAAAABgAAAAAA9/8EAAAABgAAAAAACgAEAAAABgAAAAAACwAEAAAABgAAAAAA9v8FAAAABgAAAAAA9/8FAAAABgAAAAAACgAFAAAABgAAAAAACwAFAAAABgAAAAAA9v8GAAAABgAAAAAA9/8GAAAABgAAAAAA+P8GAAAABgAAAAAA+f8GAAAABgAAAAAA+v8GAAAABgAAAAAA+/8GAAAABgAAAAAA/P8GAAAABgAAAAAA/f8GAAAABgAAAAAA/v8GAAAABgAAAAAA//8GAAAABgAAAAAAAAAGAAAABgAAAAAAAQAGAAAABgAAAAAAAgAGAAAABgAAAAAAAwAGAAAABgAAAAAABAAGAAAABgAAAAAABQAGAAAABgAAAAAABgAGAAAABgAAAAAABwAGAAAABgAAAAAACAAGAAAABgAAAAAACQAGAAAABgAAAAAACgAGAAAABgAAAAAACwAGAAAABgAAAAAA9v8HAAAABgAAAAAA9/8HAAAABgAAAAAA+P8HAAAABgAAAAAA+f8HAAAABgAAAAAA+v8HAAAABgAAAAAA+/8HAAAABgAAAAAA/P8HAAAABgAAAAAA/f8HAAAABgAAAAAA/v8HAAAABgAAAAAA//8HAAAABgAAAAAAAAAHAAAABgAAAAAAAQAHAAAABgAAAAAAAgAHAAAABgAAAAAAAwAHAAAABgAAAAAABAAHAAAABgAAAAAABQAHAAAABgAAAAAABgAHAAAABgAAAAAABwAHAAAABgAAAAAACAAHAAAABgAAAAAACQAHAAAABgAAAAAACgAHAAAABgAAAAAACwAHAAAABgAAAAAA")
+
+[node name="Navigation" type="Node2D" parent="."]
+
+[node name="Nav_0" type="NavigationRegion2D" parent="Navigation"]
+navigation_polygon = SubResource("NavigationPolygon_0")
+
+[node name="Nav_1" type="NavigationRegion2D" parent="Navigation"]
+navigation_polygon = SubResource("NavigationPolygon_1")
+
+[node name="Nav_2" type="NavigationRegion2D" parent="Navigation"]
+navigation_polygon = SubResource("NavigationPolygon_2")
+
+[node name="Nav_3" type="NavigationRegion2D" parent="Navigation"]
+navigation_polygon = SubResource("NavigationPolygon_3")
+
+[node name="Nav_4" type="NavigationRegion2D" parent="Navigation"]
+navigation_polygon = SubResource("NavigationPolygon_4")
+
+[node name="Nav_5" type="NavigationRegion2D" parent="Navigation"]
+navigation_polygon = SubResource("NavigationPolygon_5")
+
+[node name="Nav_6" type="NavigationRegion2D" parent="Navigation"]
+navigation_polygon = SubResource("NavigationPolygon_6")
+
+[node name="Nav_7" type="NavigationRegion2D" parent="Navigation"]
+navigation_polygon = SubResource("NavigationPolygon_7")
+
+[node name="Nav_8" type="NavigationRegion2D" parent="Navigation"]
+navigation_polygon = SubResource("NavigationPolygon_8")
+
+[node name="Nav_9" type="NavigationRegion2D" parent="Navigation"]
+navigation_polygon = SubResource("NavigationPolygon_9")
+
+[node name="Nav_10" type="NavigationRegion2D" parent="Navigation"]
+navigation_polygon = SubResource("NavigationPolygon_10")
+
+[node name="Nav_11" type="NavigationRegion2D" parent="Navigation"]
+navigation_polygon = SubResource("NavigationPolygon_11")
+
+[node name="Patrol" type="Node2D" parent="."]
+
+[node name="PatrolNode_1" type="Marker2D" parent="Patrol" groups=["patrol_nodes"]]
+position = Vector2(-208.00, -144.00)
+
+[node name="PatrolNode_2" type="Marker2D" parent="Patrol" groups=["patrol_nodes"]]
+position = Vector2(176.00, -144.00)
+
+[node name="PatrolNode_3" type="Marker2D" parent="Patrol" groups=["patrol_nodes"]]
+position = Vector2(304.00, -48.00)
+
+[node name="PatrolNode_4" type="Marker2D" parent="Patrol" groups=["patrol_nodes"]]
+position = Vector2(-208.00, -16.00)
+
+[node name="PatrolNode_5" type="Marker2D" parent="Patrol" groups=["patrol_nodes"]]
+position = Vector2(144.00, 16.00)
+
+[node name="PatrolNode_6" type="Marker2D" parent="Patrol" groups=["patrol_nodes"]]
+position = Vector2(-112.00, 80.00)
+
+[node name="PatrolNode_7" type="Marker2D" parent="Patrol" groups=["patrol_nodes"]]
+position = Vector2(304.00, 112.00)
+
+[node name="PatrolNode_8" type="Marker2D" parent="Patrol" groups=["patrol_nodes"]]
+position = Vector2(-48.00, 176.00)
+
+[node name="WakeTrigger" type="Area2D" parent="."]
+position = Vector2(-208.00, 176.00)
+collision_layer = 0
+collision_mask = 2
+
+[node name="Collision" type="CollisionShape2D" parent="WakeTrigger"]
+shape = SubResource("RectangleShape2D_wake")
+
+[node name="Pools" type="Node" parent="."]
+
+[node name="Toothpicks" type="Node" parent="Pools"]
+script = ExtResource("pool")
+projectile_scene = ExtResource("toothpick")
+pool_size = 100
+
+[node name="BerryShots" type="Node" parent="Pools" groups=["berry_pool"]]
+script = ExtResource("pool")
+projectile_scene = ExtResource("berry_shot")
+pool_size = 64
+
+[node name="Actors" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="blueberry_1" parent="Actors" instance=ExtResource("blueberry")]
+position = Vector2(304.00, -176.00)
+
+[node name="blueberry_2" parent="Actors" instance=ExtResource("blueberry")]
+position = Vector2(-208.00, -176.00)
+
+[node name="blueberry_3" parent="Actors" instance=ExtResource("blueberry")]
+position = Vector2(176.00, 176.00)
+
+[node name="blueberry_4" parent="Actors" instance=ExtResource("blueberry")]
+position = Vector2(-240.00, 16.00)
+
+[node name="raspberry_1" parent="Actors" instance=ExtResource("raspberry")]
+position = Vector2(176.00, -176.00)
+
+[node name="raspberry_2" parent="Actors" instance=ExtResource("raspberry")]
+position = Vector2(144.00, -16.00)
+
+[node name="raspberry_3" parent="Actors" instance=ExtResource("raspberry")]
+position = Vector2(-112.00, 176.00)
+
+[node name="raspberry_4" parent="Actors" instance=ExtResource("raspberry")]
+position = Vector2(304.00, 144.00)
+
+[node name="blackberry_1" parent="Actors" instance=ExtResource("blackberry")]
+position = Vector2(304.00, -80.00)
+
+[node name="blackberry_2" parent="Actors" instance=ExtResource("blackberry")]
+position = Vector2(-112.00, -16.00)
+
+[node name="blackberry_3" parent="Actors" instance=ExtResource("blackberry")]
+position = Vector2(304.00, 16.00)
+
+[node name="blackberry_4" parent="Actors" instance=ExtResource("blackberry")]
+position = Vector2(112.00, 176.00)
+
+[node name="Tom" parent="Actors" instance=ExtResource("tom")]
+position = Vector2(-208.00, 176.00)
+toothpick_pool_path = NodePath("../../Pools/Toothpicks")
+
+[node name="coin_1" parent="Actors" instance=ExtResource("coin")]
+position = Vector2(272.00, -176.00)
+
+[node name="coin_2" parent="Actors" instance=ExtResource("coin")]
+position = Vector2(-208.00, 80.00)
+
+[node name="HUD" parent="." instance=ExtResource("hud")]
