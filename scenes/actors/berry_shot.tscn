@@ -17,9 +17,9 @@ speed = 96.0
 damage = 3
 lifetime = 8.0
 rotation_offset = 0.0
-break_color = Color(0.75, 0.15, 0.18, 1)
 
 [node name="Sprite" type="Sprite2D" parent="."]
+rotation = 1.570796
 texture_filter = 1
 texture = ExtResource("2_tex")
 

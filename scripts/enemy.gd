@@ -16,6 +16,7 @@ var alive := true
 func _ready() -> void:
 	hp = max_hp
 	motion_mode = MOTION_MODE_FLOATING
+	HitFlash.prepare(sprite)
 	agent.avoidance_enabled = true
 	agent.radius = 8.0
 	agent.max_speed = speed
@@ -34,7 +35,7 @@ func take_damage(amount: int) -> void:
 	if not alive:
 		return
 	hp -= amount
-	HitFlash.flash(self, [sprite])
+	HitFlash.play(sprite)
 	if hp <= 0:
 		die()
 

@@ -26,6 +26,8 @@ var _facing := Vector2.RIGHT
 
 func _ready() -> void:
 	motion_mode = MOTION_MODE_FLOATING
+	HitFlash.prepare(_body)
+	HitFlash.prepare(_hat)
 	_body.play("idle")
 	_hat.play("idle")
 	hp_changed.emit(hp, MAX_HP)
@@ -62,7 +64,8 @@ func receive_damage(amount: int) -> void:
 	if not _alive:
 		return
 	hp = max(hp - amount, 0)
-	HitFlash.flash(self, [_body, _hat])
+	HitFlash.play(_body)
+	HitFlash.play(_hat)
 	_spawn_splotch()
 	hp_changed.emit(hp, MAX_HP)
 	if hp <= 0:
